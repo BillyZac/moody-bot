@@ -13,21 +13,17 @@ var T = new Twit({
 })
 
 var now = moment()
-// console.log(now);
+console.log('Looking for mentions at', now)
 
-setInterval(function() {
+T.get('statuses/mentions_timeline', function(err, mentions) {
+  if (err) { console.log('There was an error getting the mentions', err) }
 
-  T.get('statuses/mentions_timeline', function(err, mentions) {
-    if (err) { console.log('There was an error getting the mentions', err) }
-
-    mentions.forEach(function(mention) {
-      // if the mention is newer than lastPostingTime, respond
-      console.log('Got a mention at ', moment(mention.created_at).format('dddd, h:mm:ss'))
-      respond(mention)
-
-    })
+  mentions.forEach(function(mention) {
+    console.log('Got a mention at ', moment(mention.created_at).format('dddd, h:mm:ss'))
+    respond(mention)
   })
-}, 240 * 1000)
+})
+
 
 function respond(mention) {
   var status = 'Hi @' + mention.user.screen_name
