@@ -10,6 +10,14 @@ var T = new Twit({
  timeout_ms: 60*1000
 })
 
-T.post('statuses/update', { status: 'hello world!' }, function(err, data, response) {
-  console.log(data)
+T.get('statuses/mentions_timeline', function(err, mentions) {
+  console.log('There was an error getting the mentions', err)
+  mentions.forEach(function(mention) {
+    console.log(mention.text);
+    console.log(mention.user.screen_name);
+    var status = 'Hi @' + mention.user.screen_name
+    T.post('statuses/update', { status: status }, function(err, data, response) {
+      if (err) console.log('There was an error posting the tweet', err)
+    })
+  })
 })
