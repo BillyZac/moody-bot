@@ -1,5 +1,7 @@
 # Moody Bot
 
+![Drawing](./drawing.png)
+
 When you tweet at Moody Bot, it studies your posts, analyzes your personality, and then draws a picture for you.
 
 Moody Bot uses [IBM's Watson](http://www.ibm.com/smarterplanet/us/en/ibmwatson/). This analysis provides the seed for generating a unique image, which is then posted to Moody Bot's Twitter feed.
