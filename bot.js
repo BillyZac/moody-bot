@@ -40,7 +40,8 @@ function respond(mention) {
 
         // Post a tweet with a reference to the image file
         var mediaIdStr = data.media_id_string
-        var params = { status: frequency + '#moody', media_ids: [mediaIdStr] }
+        var status = '@' + mention.user.screen_name
+        var params = { status: status, media_ids: [mediaIdStr] }
 
         T.post('statuses/update', params, function (err, data, response) {
           // Confirmation that the post was successful
