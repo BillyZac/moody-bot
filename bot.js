@@ -15,12 +15,18 @@ var T = new Twit({
  timeout_ms: 60*1000
 })
 
+
 T.get('statuses/mentions_timeline', function(err, mentions) {
   if (err) { console.log('There was an error getting the mentions', err) }
 
   mentions.forEach(function(mention) {
     console.log('Got a mention at ', mention.created_at)
-    respond(mention)
+    if (online === 'online') {
+      console.log('Going to respond', 'Online:', online);
+      respond(mention)
+    } else {
+      console.log('Not going to respond', 'Online:', online);
+    }
   })
 })
 
@@ -39,7 +45,7 @@ function respond(mention) {
     // Make the image
     makeDrawing(frequency, 100)
     .then(function(filePath) {
-      if (online) {
+
         console.log('Finished making the drawing:', filePath);
 
         // Read the image file
@@ -74,10 +80,8 @@ function respond(mention) {
             } else {
               console.log('Successfully posted:', data.created_at, data.text)
             }
-
           })
         })
-      } // end if (online)
     })
   })
 }
