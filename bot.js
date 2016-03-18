@@ -5,6 +5,8 @@ var unirest = require('unirest')
 
 require('dotenv').config()
 
+var online = process.env.APP_ONLINE || false
+
 var T = new Twit({
  consumer_key: process.env.CONSUMER_KEY,
  consumer_secret: process.env.CONSUMER_SECRET,
@@ -37,20 +39,21 @@ function respond(mention) {
     // Make the image
     makeDrawing(frequency, 100)
     .then(function(filePath) {
-      console.log('Finished making the drawing:', filePath);
+      if (online) {
+        console.log('Finished making the drawing:', filePath);
 
-      // Read the image file
-      var b64content = fs.readFileSync(filePath, { encoding: 'base64' })
+        // Read the image file
+        var b64content = fs.readFileSync(filePath, { encoding: 'base64' })
 
-      // Upload the image to Twitter
-      T.post('media/upload', { media_data: b64content }, function (err, data, response) {
+        // Upload the image to Twitter
+        T.post('media/upload', { media_data: b64content }, function (err, data, response) {
 
-        // Post a tweet with a reference to the image file
-        var mediaIdStr = data.media_id_string
+          // Post a tweet with a reference to the image file
+          var mediaIdStr = data.media_id_string
 
-        // Construct a message to the mentioner
-        // Using #user instead of @user to avoid violating Twitter's TOS
-        var status =
+          // Construct a message to the mentioner
+          // Using #user instead of @user to avoid violating Twitter's TOS
+          var status =
           [
             '#',
             mention.user.screen_name,
@@ -60,20 +63,21 @@ function respond(mention) {
             ' out of ten in terms of emotionality.'
           ].join('')
 
-        var params = {
-          status: status,
-          media_ids: [mediaIdStr]
-        }
-
-        T.post('statuses/update', params, function (error, data, response) {
-          if (error) {
-            console.log('There was an error posting to Twitter:', error)
-          } else {
-            console.log('Successfully posted:', data.created_at, data.text)
+          var params = {
+            status: status,
+            media_ids: [mediaIdStr]
           }
 
+          T.post('statuses/update', params, function (error, data, response) {
+            if (error) {
+              console.log('There was an error posting to Twitter:', error)
+            } else {
+              console.log('Successfully posted:', data.created_at, data.text)
+            }
+
+          })
         })
-      })
+      } // end if (online)
     })
   })
 }
