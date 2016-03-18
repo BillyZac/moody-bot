@@ -109,7 +109,6 @@ function respond(mention) {
             console.log('To save to DB:', responseToMention);
             responseCollection.insert(responseToMention)
           }
-          db.close()
         })
       })
     })
