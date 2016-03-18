@@ -2,3 +2,4 @@
 .env-old
 node_modules/
 drawings/
+sample*

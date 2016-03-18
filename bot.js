@@ -2,6 +2,10 @@ var Twit = require('twit')
 var makeDrawing = require('./makeDrawing')
 var fs = require('fs')
 var unirest = require('unirest')
+var dbUrl = process.env.MONGOLAB_URI || 'localhost/twitter_bot'
+var db = require('monk')(dbUrl)
+
+var responseCollection = db.get('responses')
 
 require('dotenv').config()
 
@@ -15,18 +19,26 @@ var T = new Twit({
  timeout_ms: 60*1000
 })
 
-
 T.get('statuses/mentions_timeline', function(err, mentions) {
   if (err) { console.log('There was an error getting the mentions', err) }
 
   mentions.forEach(function(mention) {
-    console.log('Got a mention at ', mention.created_at)
-    if (online === 'online') {
-      console.log('Going to respond', 'Online:', online);
-      respond(mention)
-    } else {
-      console.log('Not going to respond', 'Online:', online);
-    }
+    console.log('Got a mention:', mention.text)
+
+    responseCollection.find({ "original_mention_id": mention.id }).then(function(result) {
+      if (result.length > 0) {
+        console.log('Mention is in the DB, so not responding:');
+        console.log(mention.id);
+      } else {
+        console.log('Mention is not in the DB.');
+        if (online === 'online') {
+          console.log('Going to respond', 'Online:', online);
+          respond(mention)
+        } else {
+          console.log('Not going to respond', 'Online:', online);
+        }
+      }
+    })
   })
 })
 
@@ -69,17 +81,27 @@ function respond(mention) {
             ' out of ten in terms of emotionality.'
           ].join('')
 
+
           var params = {
             status: status,
-            media_ids: [mediaIdStr]
+            // media_ids: [mediaIdStr]
           }
+
+          params.status = 'Little cows make puppy chow.'
 
           T.post('statuses/update', params, function (error, data, response) {
             if (error) {
               console.log('There was an error posting to Twitter:', error)
             } else {
-              console.log('Successfully posted:', data.created_at, data.text)
+              console.log('Successfully posted.')
+              var responseToMention = {
+                original_mention_id: mention.id,
+                response_id: data.id
+              }
+              console.log('To save to DB:', responseToMention);
+              responseCollection.insert(responseToMention)
             }
+            db.close()
           })
         })
     })

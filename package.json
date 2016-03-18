@@ -11,6 +11,8 @@
   "license": "ISC",
   "dependencies": {
     "dotenv": "^2.0.0",
+    "mongodb": "~1.4.4",
+    "monk": "^1.0.1",
     "twit": "^2.2.3",
     "unirest": "^0.4.2"
   }
