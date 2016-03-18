@@ -1,3 +1,4 @@
 .env
+.env-old
 node_modules/
 drawings/

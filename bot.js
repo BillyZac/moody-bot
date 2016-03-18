@@ -1,6 +1,7 @@
 var Twit = require('twit')
 var makeDrawing = require('./makeDrawing')
 var fs = require('fs')
+var unirest = require('unirest')
 
 require('dotenv').config()
 
@@ -27,8 +28,14 @@ function respond(mention) {
   // This will eventually come from the personality profile data.
   var frequency = Math.random() * 100
 
-  // Make the image
-  makeDrawing(frequency, 100)
+  unirest.get('https://personality.herokuapp.com/:' + mention.user.screen_name)
+  .end(function(response) {
+    var personality = response.body
+    // console.log(personality.traits[0].children[2].name)
+    var emotionality = Math.trunc(parseFloat(personality.traits[0].children[2].percentage) * 10)
+    console.log(emotionality);
+    // Make the image
+    makeDrawing(frequency, 100)
     .then(function(filePath) {
       console.log('Finished making the drawing:', filePath);
 
@@ -40,13 +47,33 @@ function respond(mention) {
 
         // Post a tweet with a reference to the image file
         var mediaIdStr = data.media_id_string
-        var status = '@' + mention.user.screen_name
-        var params = { status: status, media_ids: [mediaIdStr] }
 
-        T.post('statuses/update', params, function (err, data, response) {
-          // Confirmation that the post was successful
-          console.log('=========================', data.created_at, data.text)
+        // Construct a message to the mentioner
+        // Using #user instead of @user to avoid violating Twitter's TOS
+        var status =
+          [
+            '#',
+            mention.user.screen_name,
+            ' ',
+            'I\'d rate you a ',
+            emotionality,
+            ' out of ten in terms of emotionality.'
+          ].join('')
+
+        var params = {
+          status: status,
+          media_ids: [mediaIdStr]
+        }
+
+        T.post('statuses/update', params, function (error, data, response) {
+          if (error) {
+            console.log('There was an error posting to Twitter:', error)
+          } else {
+            console.log('Successfully posted:', data.created_at, data.text)
+          }
+
         })
       })
     })
+  })
 }
