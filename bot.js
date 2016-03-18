@@ -61,21 +61,39 @@ function respond(mention) {
 
         // Construct a message to the mentioner
         // Using #user instead of @user to avoid violating Twitter's TOS
-        var status =
-        [
-          '#',
-          mention.user.screen_name,
-          ' ',
-          'You\'re a ',
-          emotionality,
-          ' out of ten in terms of emotionality.'
-        ].join('')
+        var compliments =
+          [
+            'You\'re a peach.',
+            'Ima like u.',
+            'Luv it or shove it.',
+            'Yes, I\'ve got a lot going on, but I\'m never too busy for you.',
+            'Can I have that recipe?',
+            'I was just thinking about you.',
+            'When I grow up, I want to be you.',
+            'John Hollowlegs is knocking on my door.',
+            'Happy cabbage burning a hole in my pocket!',
+            'Oy, I got the zings.'
+          ]
 
+        // var status =
+        //   [
+        //     '#',
+        //     mention.user.screen_name,
+        //     ' ',
+        //     'You\'re a ',
+        //     emotionality,
+        //     ' out of ten in terms of emotionality.'
+        //   ].join('')
+
+        var index = Math.trunc((Math.random() * 10))
+        var status = compliments[index] || 'Hm, maybe not.'
+        index = Math.trunc((Math.random() * 10))
+        status += ' ' + compliments[index] || 'Hm, maybe not.'
 
         var params = {
-          status: status,
-          // media_ids: [mediaIdStr]
-        }
+            status: status,
+            // media_ids: [mediaIdStr]
+          }
 
         // params.status = 'Every thumb is my chum.'
 
