@@ -1,18 +1,20 @@
 var webshot = require('webshot')
 
+var imageUrl = 'https://moodymeeks.firebaseapp.com/personality.html'
+
 var options = {
   screenSize: {
-    width: 1024,
+    width: 800,
     height: 800
   },
   shotSize: {
-    width: 400,
-    height: 400
+    width: 800,
+    height: 800
   },
   shotOffset: {
     left: 0,
     right: 0,
-    top: 100,
+    top: 0,
     bottom: 0
   }
 }
@@ -20,7 +22,7 @@ var options = {
 function takeScreenshot() {
   return new Promise(function(resolve, reject) {
     var fileName = 'images/' + Date.now() + '.png'
-    webshot('flickr.com', fileName, options, function(error) {
+    webshot(imageUrl, fileName, options, function(error) {
       if (error) reject(error)
       resolve(fileName)
     })
