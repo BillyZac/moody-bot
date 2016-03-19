@@ -1,9 +1,10 @@
 var Twit = require('twit')
-var makeDrawing = require('./makeDrawing')
+// var makeDrawing = require('./makeDrawing')
 var fs = require('fs')
 var unirest = require('unirest')
 var dbUrl = process.env.MONGOLAB_URI || 'localhost/twitter_bot'
 var db = require('monk')(dbUrl)
+var takeScreenshot = require('./take-screenshot')
 
 var responseCollection = db.get('responses')
 
@@ -48,7 +49,7 @@ function respond(mention) {
     var emotionality = Math.trunc(parseFloat(personality.traits[0].children[2].percentage) * 10)
 
     // Make the image
-    makeDrawing(100, 100)
+    takeScreenshot()
     .then(function(filePath) {
       // Read the image file
       var b64content = fs.readFileSync(filePath, { encoding: 'base64' })
@@ -92,7 +93,7 @@ function respond(mention) {
 
         var params = {
             status: status,
-            // media_ids: [mediaIdStr]
+            media_ids: [mediaIdStr]
           }
 
         // params.status = 'Every thumb is my chum.'
