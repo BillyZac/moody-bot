@@ -1,6 +1,6 @@
 var webshot = require('webshot')
 
-var imageUrl = 'https://moodymeeks.firebaseapp.com/personality.html'
+var baseImageUrl = 'https://moodymeeks.firebaseapp.com/'
 
 var options = {
   screenSize: {
@@ -19,7 +19,18 @@ var options = {
   }
 }
 
-function takeScreenshot() {
+function takeScreenshot(radius) {
+  // Set url params, which affect the visualization
+  var imageUrl =
+    [ baseImageUrl,
+      '?',
+      'color=aqua',
+      '&',
+      'radius=',
+      radius
+    ].join('')
+  console.log('Getting image from here:', imageUrl);
+
   return new Promise(function(resolve, reject) {
     var fileName = 'images/' + Date.now() + '.png'
     webshot(imageUrl, fileName, options, function(error) {

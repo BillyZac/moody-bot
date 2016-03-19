@@ -46,10 +46,10 @@ function respond(mention) {
   unirest.get('https://personality.herokuapp.com/:' + mention.user.screen_name)
   .end(function(response) {
     var personality = response.body
-    var emotionality = Math.trunc(parseFloat(personality.traits[0].children[2].percentage) * 10)
+    var emotionality = Math.trunc(parseFloat(personality.traits[0].children[2].percentage) * 100)
 
     // Make the image
-    takeScreenshot()
+    takeScreenshot(emotionality)
     .then(function(filePath) {
       // Read the image file
       var b64content = fs.readFileSync(filePath, { encoding: 'base64' })
