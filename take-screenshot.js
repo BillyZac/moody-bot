@@ -19,13 +19,16 @@ var options = {
   }
 }
 
-function takeScreenshot(yFactor) {
+function takeScreenshot(yFactor, emotionality) {
   // Set url params, which affect the visualization
   var imageUrl =
     [ baseImageUrl,
       '?',
       'yFactor=',
-      yFactor
+      yFactor,
+      '&',
+      'emotionality=',
+      emotionality
     ].join('')
   console.log('Getting image from here:', imageUrl);
 
