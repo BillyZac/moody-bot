@@ -67,43 +67,10 @@ function respond(mention) {
         // Post a tweet with a reference to the image file
         var mediaIdStr = data.media_id_string
 
-        // Construct a message to the mentioner
-        // Using #user instead of @user to avoid violating Twitter's TOS
-        var compliments =
-          [
-            'You\'re a peach.',
-            'Ima like u.',
-            'Luv it or shove it.',
-            'Yes, I\'ve got a lot going on, but I\'m never too busy for you.',
-            'Can I have that recipe?',
-            'I was just thinking about you.',
-            'When I grow up, I want to be you.',
-            'John Hollowlegs is knocking on my door.',
-            'Happy cabbage burning a hole in my pocket!',
-            'Oy, I got the zings.'
-          ]
-
-        // var status =
-        //   [
-        //     '#',
-        //     mention.user.screen_name,
-        //     ' ',
-        //     'You\'re a ',
-        //     emotionality,
-        //     ' out of ten in terms of emotionality.'
-        //   ].join('')
-
-        var index = Math.trunc((Math.random() * 10))
-        var status = compliments[index] || 'Hm, maybe not.'
-        index = Math.trunc((Math.random() * 10))
-        status += ' ' + compliments[index] || 'Hm, maybe not.'
-
         var params = {
-            status: status,
+            status: getCompliment(),
             media_ids: [mediaIdStr]
           }
-
-        // params.status = 'Every thumb is my chum.'
 
         T.post('statuses/update', params, function (error, data, response) {
           if (error) {
@@ -135,4 +102,29 @@ function getEmotionality(personality) {
     emotionality = value
   }
   return emotionality
+}
+
+function getCompliment() {
+  var comment = ''
+
+  var compliments =
+    [
+      'You\'re a peach.',
+      'Ima like u.',
+      'Luv it or shove it.',
+      'Yes, I\'ve got a lot going on, but I\'m never too busy for you.',
+      'Can I have that recipe?',
+      'I was just thinking about you.',
+      'When I grow up, I want to be you.',
+      'John Hollowlegs is knocking on my door.',
+      'Happy cabbage burning a hole in my pocket!',
+      'Oy, I got the zings.'
+    ]
+
+  var index = Math.trunc((Math.random() * 10))
+  comment = compliments[index] || 'Hm, maybe not.'
+  index = Math.trunc((Math.random() * 10))
+  comment += ' ' + compliments[index] || 'Hm, maybe not.'
+
+  return comment
 }
