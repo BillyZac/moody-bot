@@ -19,15 +19,13 @@ var options = {
   }
 }
 
-function takeScreenshot(radius) {
+function takeScreenshot(yFactor) {
   // Set url params, which affect the visualization
   var imageUrl =
     [ baseImageUrl,
       '?',
-      'color=aqua',
-      '&',
-      'radius=',
-      radius
+      'yFactor=',
+      yFactor
     ].join('')
   console.log('Getting image from here:', imageUrl);
 

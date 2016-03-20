@@ -46,7 +46,8 @@ function respond(mention) {
   unirest.get('https://personality.herokuapp.com/:' + mention.user.screen_name)
   .end(function(response) {
     var personality = response.body
-    var emotionality = Math.trunc(parseFloat(personality.traits[0].children[2].percentage) * 100)
+    console.log(personality);
+    var emotionality = Math.trunc(parseFloat(personality.traits[0].children[2].percentage) * 10)
 
     // Make the image
     takeScreenshot(emotionality)
