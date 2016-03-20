@@ -20,6 +20,8 @@ var options = {
 }
 
 function takeScreenshot(yFactor, emotionality) {
+  yFactor = yFactor || 0
+  emotionality = emotionality || 0
   // Set url params, which affect the visualization
   var imageUrl =
     [ baseImageUrl,
