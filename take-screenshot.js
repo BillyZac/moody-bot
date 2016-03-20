@@ -19,19 +19,9 @@ var options = {
   }
 }
 
-function takeScreenshot(yFactor, emotionality) {
-  yFactor = yFactor || 0
-  emotionality = emotionality || 0
+function takeScreenshot(personality) {
   // Set url params, which affect the visualization
-  var imageUrl =
-    [ baseImageUrl,
-      '?',
-      'yFactor=',
-      yFactor,
-      '&',
-      'emotionality=',
-      emotionality
-    ].join('')
+  var imageUrl = baseImageUrl + getUrlParams(personality)
   console.log('Getting image from here:', imageUrl);
 
   return new Promise(function(resolve, reject) {
@@ -44,3 +34,29 @@ function takeScreenshot(yFactor, emotionality) {
 }
 
 module.exports = takeScreenshot
+
+
+function getUrlParams(personality) {
+  var urlParams =
+  [
+    '?',
+    'openness=',
+    personality.openness,
+    '&',
+    'conscientiousness=',
+    personality.conscientiousness,
+    '&',
+    'extraversion=',
+    personality.extraversion,
+    '&',
+    'agreeableness=',
+    personality.agreeableness,
+    '&',
+    'neuroticism=',
+    personality.neuroticism,
+    '&',
+    'emotionality=',
+    personality.emotionality
+  ].join('')
+  return urlParams
+}

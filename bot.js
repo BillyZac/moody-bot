@@ -45,18 +45,26 @@ if (online === 'online') {
 function respond(mention) {
   unirest.get('https://personality.herokuapp.com/:' + mention.user.screen_name)
   .end(function(response) {
-
     ///////////////////////////////////////
-    var personality = response.body
-    console.log(personality);
-    var emotionality = getEmotionality(personality)
+    var watsonPersonality = response.body
+    console.log(watsonPersonality);
+
+    var personality = {
+      openness: getTraitPercentage(0, watsonPersonality),
+      conscientiousness: getTraitPercentage(1, watsonPersonality),
+      extraversion: getTraitPercentage(2, watsonPersonality),
+      agreeableness: getTraitPercentage(3, watsonPersonality),
+      neuroticism: getTraitPercentage(0, watsonPersonality),
+      emotionality: getEmotionality(watsonPersonality) // Special case -- nested under Openness
+    }
+
     ///////////////////////////////////////
 
 
     // Make the image
     var yFactor = 4 // Expects 0 - 8 TODO: Expect 0 - 100
     // emotionality = 40
-    takeScreenshot(yFactor, emotionality)
+    takeScreenshot(personality)
     .then(function(filePath) {
       // Read the image file
       var b64content = fs.readFileSync(filePath, { encoding: 'base64' })
@@ -102,6 +110,15 @@ function getEmotionality(personality) {
     emotionality = value
   }
   return emotionality
+}
+
+function getTraitPercentage(index, personality) {
+  var traitPercentage = 0 // Default value
+  var value = Math.trunc(parseFloat(personality.traits[index].percentage) * 100)
+  if (value >= 0 || value <= 100) {
+    traitPercentage = value
+  }
+  return traitPercentage
 }
 
 function getCompliment() {
