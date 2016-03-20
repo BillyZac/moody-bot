@@ -45,12 +45,18 @@ if (online === 'online') {
 function respond(mention) {
   unirest.get('https://personality.herokuapp.com/:' + mention.user.screen_name)
   .end(function(response) {
+
+    ///////////////////////////////////////
     var personality = response.body
     console.log(personality);
-    var emotionality = Math.trunc(parseFloat(personality.traits[0].children[2].percentage) * 10)
+    var emotionality = getEmotionality(personality)
+    ///////////////////////////////////////
+
 
     // Make the image
-    takeScreenshot(emotionality)
+    var yFactor = 4 // Expects 0 - 8 TODO: Expect 0 - 100
+    // emotionality = 40
+    takeScreenshot(yFactor, emotionality)
     .then(function(filePath) {
       // Read the image file
       var b64content = fs.readFileSync(filePath, { encoding: 'base64' })
@@ -115,4 +121,18 @@ function respond(mention) {
       })
     })
   })
+}
+
+// Take a personality result from Watson,
+// Return a personality score ranging from 0 - 100
+function otionality(personality) {
+  var emotionality = 0 // Default value
+  // In Watson's representation of the Big Five system
+  // The first element in Traits is Openness
+  // The third element in Openness is Emotionality
+  var value = Math.trunc(parseFloat(personality.traits[0].children[2].percentage) * 100)
+  if (value >= 0 || value <= 100) {
+    emotionality = value
+  }
+  return emotionality
 }
