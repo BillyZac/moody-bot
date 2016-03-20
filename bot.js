@@ -125,7 +125,7 @@ function respond(mention) {
 
 // Take a personality result from Watson,
 // Return a personality score ranging from 0 - 100
-function otionality(personality) {
+function getEmotionality(personality) {
   var emotionality = 0 // Default value
   // In Watson's representation of the Big Five system
   // The first element in Traits is Openness
