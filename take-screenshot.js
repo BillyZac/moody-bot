@@ -1,15 +1,15 @@
 var webshot = require('webshot')
 
-var baseImageUrl = 'https://moodymeeks.firebaseapp.com/'
+var baseImageUrl = 'https://moodymeeks.firebaseapp.com/viz.html'
 
 var options = {
   screenSize: {
-    width: 800,
-    height: 800
+    width: 600,
+    height: 600
   },
   shotSize: {
-    width: 800,
-    height: 800
+    width: 600,
+    height: 600
   },
   shotOffset: {
     left: 0,
