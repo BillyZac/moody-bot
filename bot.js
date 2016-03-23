@@ -72,11 +72,21 @@ function respond(mention) {
       // Upload the image to Twitter
       T.post('media/upload', { media_data: b64content }, function (err, data, response) {
 
+        var status = [
+          '@',
+          mention.user.screen_name,
+          ' ',
+          'I drew a picture of you!',
+          ' ',  
+          'https://moodymeeks.firebaseapp.com/',
+          getUrlParams(personality)
+        ].join('')
+
         // Post a tweet with a reference to the image file
         var mediaIdStr = data.media_id_string
 
         var params = {
-            status: getCompliment(),
+            status: status,
             media_ids: [mediaIdStr]
           }
 
@@ -144,4 +154,29 @@ function getCompliment() {
   comment += ' ' + compliments[index] || 'Hm, maybe not.'
 
   return comment
+}
+
+function getUrlParams(personality) {
+  var urlParams =
+  [
+    '?',
+    'openness=',
+    personality.openness,
+    '&',
+    'conscientiousness=',
+    personality.conscientiousness,
+    '&',
+    'extraversion=',
+    personality.extraversion,
+    '&',
+    'agreeableness=',
+    personality.agreeableness,
+    '&',
+    'neuroticism=',
+    personality.neuroticism,
+    '&',
+    'emotionality=',
+    personality.emotionality
+  ].join('')
+  return urlParams
 }
