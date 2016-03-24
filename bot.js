@@ -43,7 +43,7 @@ if (online === 'online') {
 }
 
 function respond(mention) {
-  unirest.get('https://personality.herokuapp.com/:' + mention.user.screen_name)
+  unirest.get('https://personality.herokuapp.com/' + mention.user.screen_name)
   .end(function(response) {
     ///////////////////////////////////////
     var watsonPersonality = response.body
@@ -77,7 +77,7 @@ function respond(mention) {
           mention.user.screen_name,
           ' ',
           'I drew a picture of you!',
-          ' ',  
+          ' ',
           'https://moodymeeks.firebaseapp.com/',
           getUrlParams(personality)
         ].join('')
